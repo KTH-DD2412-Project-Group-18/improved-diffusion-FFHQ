@@ -184,9 +184,6 @@ class TrainLoop:
             minutes = batch_time // 60
             seconds = batch_time - minutes * 60
             print("batch_time: ", batch_time)
-            print("minutes: ", minutes)
-            print("seconds: ", seconds)
-
             print(f"Time previous batch: min: {minutes}, sec: {round(seconds,2)}")
             self.step += 1
         # Save the last checkpoint if it wasn't already saved.
