@@ -22,6 +22,9 @@ def main():
     dist_util.setup_dist()
     logger.configure()
 
+    print("Using: ", dist_util.dev())
+    print("args.diffusion_steps: ", args.diffusion_steps)
+
     logger.log("creating model and diffusion...")
     model, diffusion = create_model_and_diffusion(
         **args_to_dict(args, model_and_diffusion_defaults().keys())

@@ -1,6 +1,7 @@
 import copy
 import functools
 import os
+import time
 
 import blobfile as bf
 import numpy as np
@@ -8,6 +9,8 @@ import torch as th
 import torch.distributed as dist
 from torch.nn.parallel.distributed import DistributedDataParallel as DDP
 from torch.optim import AdamW
+
+from tqdm import tqdm
 
 from . import dist_util, logger
 from .fp16_util import (
@@ -163,6 +166,10 @@ class TrainLoop:
             not self.lr_anneal_steps
             or self.step + self.resume_step < self.lr_anneal_steps
         ):
+            print("self.step: ", self.step)
+            print("self.resume_step: ", self.resume_step)
+            print("lr_anneal_steps: ", self.lr_anneal_steps)
+            start_time = time.time()
             batch, cond = next(self.data)
             self.run_step(batch, cond)
             if self.step % self.log_interval == 0:
@@ -172,6 +179,15 @@ class TrainLoop:
                 # Run for a finite amount of time in integration tests.
                 if os.environ.get("DIFFUSION_TRAINING_TEST", "") and self.step > 0:
                     return
+            end_time = time.time()
+            batch_time = end_time - start_time
+            minutes = batch_time // 60
+            seconds = batch_time - minutes * 60
+            print("batch_time: ", batch_time)
+            print("minutes: ", minutes)
+            print("seconds: ", seconds)
+
+            print(f"Time previous batch: min: {minutes}, sec: {round(seconds,2)}")
             self.step += 1
         # Save the last checkpoint if it wasn't already saved.
         if (self.step - 1) % self.save_interval != 0:

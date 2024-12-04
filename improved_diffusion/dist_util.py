@@ -49,6 +49,11 @@ def dev():
         return th.device(f"cuda:{MPI.COMM_WORLD.Get_rank() % GPUS_PER_NODE}")
     return th.device("cpu")
 
+    # if th.cuda.is_available():
+    #     return th.device("cuda")
+    # elif th.backends.mps.is_available():
+    #     return th.device("mps")
+    # return th.device("cpu")
 
 def load_state_dict(path, **kwargs):
     """
