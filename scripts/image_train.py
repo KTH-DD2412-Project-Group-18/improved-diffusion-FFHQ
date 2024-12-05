@@ -20,7 +20,7 @@ def main():
     args = create_argparser().parse_args()
 
     dist_util.setup_dist()
-    logger.configure(dir="./tmp/checkpoints")
+    logger.configure(dir="./tmp/saves")
 
     print("Using: ", dist_util.dev())
 
