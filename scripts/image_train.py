@@ -23,7 +23,6 @@ def main():
     logger.configure()
 
     print("Using: ", dist_util.dev())
-    print("args.diffusion_steps: ", args.diffusion_steps)
 
     logger.log("creating model and diffusion...")
     model, diffusion = create_model_and_diffusion(
@@ -70,7 +69,7 @@ def create_argparser():
         batch_size=1,
         microbatch=-1,  # -1 disables microbatches
         ema_rate="0.9999",  # comma-separated list of EMA values
-        log_interval=10,
+        log_interval=1000,
         save_interval=10000,
         resume_checkpoint="",
         use_fp16=False,
