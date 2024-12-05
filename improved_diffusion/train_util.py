@@ -171,20 +171,20 @@ class TrainLoop:
             start_time = time.time()
             batch, cond = next(self.data)
             self.run_step(batch, cond)
+            print("self.step: ", self.step)
             if self.step % self.log_interval == 0:
-                print("self.step: ", self.step)
                 logger.dumpkvs()
             if self.step % self.save_interval == 0:
                 self.save()
                 # Run for a finite amount of time in integration tests.
                 if os.environ.get("DIFFUSION_TRAINING_TEST", "") and self.step > 0:
                     return
-            # end_time = time.time()
-            # batch_time = end_time - start_time
-            # minutes = batch_time // 60
-            # seconds = batch_time - minutes * 60
-            # print("batch_time: ", batch_time)
-            # print(f"Time previous batch: min: {minutes}, sec: {round(seconds,2)}")
+            end_time = time.time()
+            batch_time = end_time - start_time
+            minutes = batch_time // 60
+            seconds = batch_time - minutes * 60
+            print("batch_time: ", batch_time)
+            print(f"Time previous batch: min: {minutes}, sec: {round(seconds,2)}")
             self.step += 1
         # Save the last checkpoint if it wasn't already saved.
         if (self.step - 1) % self.save_interval != 0:
